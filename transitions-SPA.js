@@ -64,7 +64,40 @@ document.addEventListener('DOMContentLoaded', function() {
   window.history.replaceState({ pageId: initialPage }, '', `${initialPage}.html`);
 
   // 6. TYPING EFFECT
-  const phrases = [
+  const phrases = ["<h1>¡Hola mundo!</h1>", "<h1>Hello, world!</h1>", "KIRSTEIN"];
+  const typingElement = document.getElementById('typing-text');
+  if (typingElement) {
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let speed = 150;
+
+    function type() {
+      const currentPhrase = phrases[phraseIndex % phrases.length];
+
+      typingElement.innerHTML = isDeleting
+        ? currentPhrase.substring(0, charIndex - 1)
+        : currentPhrase.substring(0, charIndex + 1);
+
+      if (!isDeleting && charIndex === currentPhrase.length) {
+        speed = 1000;
+        isDeleting = true;
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        phraseIndex++;
+        speed = 500;
+      } else {
+        speed = isDeleting ? 50 : 150;
+      }
+
+      isDeleting ? charIndex-- : charIndex++;
+      setTimeout(type, speed);
+    }
+    type();
+  }
+});
+
+const phrases = [
             "<h1>¡Hola mundo!</h1>",
             "<h1>Hello, world!</h1>",
             "KIRSTEIN"
