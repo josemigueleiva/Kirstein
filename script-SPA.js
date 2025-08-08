@@ -123,56 +123,65 @@ document.addEventListener('DOMContentLoaded', function() {
   // 4. BRICK WALL (SIMPLIFIED)
   // ======================
   function initBrickWall() {
-    const container = document.querySelector('.brick-wall-container');
-    if (!container) return;
+          const container = document.querySelector('.servicio .brick-wall-container');
+          const brickWidth = 58;
+          const brickHeight = 28;
+          const brickGap = 2;
+          const containerWidth = container.offsetWidth;
+          const containerHeight = 200;
+          const bricksPerRow = 3; // As requested - 5 bricks in bottom row
+          const rows = Math.floor(containerHeight / (brickHeight + brickGap));
 
-    container.innerHTML = '';
+          let bricks = [];
+          let currentBrick = 0;
 
-    const brickWidth = 58;
-    const brickHeight = 28;
-    const brickGap = 2;
-    const containerWidth = container.offsetWidth;
-    const containerHeight = 200;
-    const bricksPerRow = 3;
-    const rows = Math.floor(containerHeight / (brickHeight + brickGap));
-    const totalGapWidth = (bricksPerRow - 1) * brickGap;
-    const adjustedBrickWidth = (containerWidth - totalGapWidth) / bricksPerRow;
-    let bricks = [];
+          // Calculate adjusted brick width to fit exactly 5 bricks with gaps
+          const totalGapWidth = (bricksPerRow - 1) * brickGap;
+          const adjustedBrickWidth = (containerWidth - totalGapWidth) / bricksPerRow;
 
-    for (let row = rows - 1; row >= 0; row--) {
-      const offset = row % 2 === 0 ? 0 : (adjustedBrickWidth + brickGap) / 2;
+          // Create bricks from bottom to top
+          for (let row = rows - 1; row >= 0; row--) {
+            // Offset every other row for brick pattern
+            const offset = row % 2 === 0 ? 0 : (adjustedBrickWidth + brickGap) / 2;
 
-      for (let col = 0; col < bricksPerRow; col++) {
-        const brick = document.createElement('div');
-        brick.className = 'brick';
-        const left = col * (adjustedBrickWidth + brickGap) + offset;
-        const top = row * (brickHeight + brickGap);
+            for (let col = 0; col < bricksPerRow; col++) {
+              const brick = document.createElement('div');
+              brick.className = 'brick';
 
-        if (left + adjustedBrickWidth <= containerWidth) {
-          brick.style.cssText = `
-            width: ${adjustedBrickWidth}px;
-            height: ${brickHeight}px;
-            left: ${left}px;
-            top: ${top}px;
-          `;
-          container.appendChild(brick);
-          bricks.push(brick);
+              const left = col * (adjustedBrickWidth + brickGap) + offset;
+              const top = row * (brickHeight + brickGap);
+
+              // If brick would go outside container, skip it
+              if (left + adjustedBrickWidth > containerWidth) continue;
+
+              brick.style.width = `${adjustedBrickWidth}px`;
+              brick.style.height = `${brickHeight}px`;
+              brick.style.left = `${left}px`;
+              brick.style.top = `${top}px`;
+
+              container.appendChild(brick);
+              bricks.push(brick);
+            }
+          }
+
+          // Animate bricks one by one in a continuous loop
+          function animateBricks() {
+            if (currentBrick >= bricks.length) {
+              // Reset animation
+              bricks.forEach(brick => brick.classList.remove('visible'));
+              currentBrick = 0;
+              setTimeout(animateBricks, 1000); // Pause before restarting
+              return;
+            }
+
+            bricks[currentBrick].classList.add('visible');
+            currentBrick++;
+            setTimeout(animateBricks, 300);
+          }
+
+          // Start the animation
+          setTimeout(animateBricks, 1000); // Initial delay
         }
-      }
-    }
 
-    let currentBrick = 0;
-    function animateBricks() {
-      if (currentBrick >= bricks.length) {
-        bricks.forEach(b => b.classList.remove('visible'));
-        currentBrick = 0;
-        setTimeout(animateBricks, 1000);
-        return;
-      }
-      bricks[currentBrick].classList.add('visible');
-      currentBrick++;
-      setTimeout(animateBricks, 100);
-    }
-    setTimeout(animateBricks, 500);
-  }
-});
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initBrickWall);
