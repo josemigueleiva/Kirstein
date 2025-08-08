@@ -123,6 +123,14 @@
 }
 
 @font-face {
+  font-family: 'FontlabHTML';
+  src: url(fonts/FontlabHTML.woff2);
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
   font-family: 'Authentic-Sans';
   src: url(fonts/authentic-sans-130.otf) format('opentype');
   font-weight: bold;
@@ -241,7 +249,7 @@ html {
 
   #typing-text{
     margin-top: 10vh;
-    font-family: 'Fontlab';
+    font-family: 'FontlabHTML';
     font-size: 2em;
     color: black;
     text-align: center;
