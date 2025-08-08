@@ -2,77 +2,35 @@ document.addEventListener('DOMContentLoaded', function() {
   // ======================
   // 1. CUSTOM CURSOR
   // ======================
+  document.addEventListener('DOMContentLoaded', () => {
   const cursor = document.querySelector('.custom-cursor');
-  if (cursor) {
-    document.addEventListener('mousemove', (e) => {
-      cursor.style.left = `${e.clientX}px`;
-      cursor.style.top = `${e.clientY}px`;
-    });
 
-    document.querySelectorAll('a').forEach(link => {
-      link.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-      link.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-    });
-  }
-
-  // ======================
-  // 2. PAGE TRANSITIONS (SIMPLIFIED)
-  // ======================
-  const navLinks = document.querySelectorAll('.navegacion a');
-  const contentContainer = document.getElementById('content-container');
-
-  // Hide all content sections by default
-  const pages = {
-    'index': document.getElementById('index-content'),
-    'proyectos': document.getElementById('proyectos-content'),
-    'contacto': document.getElementById('contacto-content')
-  };
-
-  // Function to show a page
-  function showPage(pageId) {
-    // Hide all pages
-    Object.values(pages).forEach(page => {
-      if (page) page.style.display = 'none';
-    });
-
-    // Show selected page
-    if (pages[pageId]) {
-      pages[pageId].style.display = 'block';
-    }
-
-    // Update active link
-    navLinks.forEach(link => {
-      link.classList.remove('active');
-    });
-    document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
-
-    // Initialize page-specific effects
-    if (pageId === 'index') {
-      initTypingEffect();
-      initBrickWall();
-    }
-  }
-
-  // Set up navigation
-  navLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      const pageId = this.getAttribute('data-page');
-      history.pushState({ pageId }, '', `${pageId}.html`);
-      showPage(pageId);
-    });
+  // Follow mouse movement
+  document.addEventListener('mousemove', (e) => {
+    cursor.style.left = `${e.clientX}px`;
+    cursor.style.top = `${e.clientY}px`;
   });
 
-  // Handle browser history
-  window.addEventListener('popstate', (e) => {
-    const pageId = e.state?.pageId || 'index';
-    showPage(pageId);
+  // Handle hover states
+  const setHover = () => cursor.classList.add('hover');
+  const removeHover = () => cursor.classList.remove('hover');
+
+  // Apply to all links
+  document.querySelectorAll('a').forEach(el => {
+    el.addEventListener('mouseenter', setHover);
+    el.addEventListener('mouseleave', removeHover);
   });
 
-  // Initialize
-  const initialPage = window.location.pathname.includes('proyectos') ? 'proyectos' :
-                    window.location.pathname.includes('contacto') ? 'contacto' : 'index';
-  showPage(initialPage);
+  // Optional: Apply to buttons or other elements
+  document.querySelectorAll('button').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('button-hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('button-hover'));
+  });
+
+  // Hide cursor when mouse leaves window
+  document.addEventListener('mouseout', () => cursor.style.opacity = '0');
+  document.addEventListener('mouseover', () => cursor.style.opacity = '1');
+});
 
   // ======================
   // 3. TYPING EFFECT (SIMPLIFIED)
