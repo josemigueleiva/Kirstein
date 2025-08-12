@@ -1,221 +1,131 @@
-@font-face {
-  font-family: 'Fontlab';
-  src: url(fonts/Fontlab.otf) format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Authentic-Sans';
-  src: url(fonts/authentic-sans-130.otf) format('opentype');
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Authentic-Sans-Normal';
-  src: url(fonts/authentic-sans-90.otf) format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Authentic-Sans-Thin';
-  src: url(fonts/authentic-sans-60.otf) format('opentype');
-  font-weight: lighter;
-  font-style: normal;
-}
-
-html, body {
-  height: 100vh;
-  width: 100vw;
-  padding: 0;
-  margin: 0;
-  overflow-x: hidden;
-}
-
-body {
-  background-color: #f5f5f5;
-}
-
-h1 {
-  font-family: 'Authentic-Sans';
-  font-weight: bold;
-  color: #fff;
-  font-size: 1em;
-}
-
-.header {
-  width: 100%;
-  overflow: hidden; /* Hide overflow */
-  white-space: nowrap; /* Keep text in one line */
-  background: #000; /* Optional: background color */
-}
-
-.marquee {
-  display: inline-block;
-  animation: scroll 600s linear infinite; /* Adjust time as needed */
-}
-
-.marquee h1 {
-  display: inline-block;
-  padding-left: 0; /* Start off-screen */
-  padding-right: 0;
-  margin: 0;
-}
-
-@keyframes scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-100%); /* Move left until fully off-screen */
-  }
-}
-
-.navegacion {
-  width: 90%;
-  margin-left: 5%;
-  margin-right: 5%;
-  padding-top: 5px;
-  padding-top: 5px;
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-}
-
-.navegacion a{
-  text-transform: uppercase;
-  text-align: center;
-  width: 50%;
-  text-decoration: none;
-  color: #080808;
-  font-family: 'Authentic-Sans-Normal';
-  font-size: 1.2em;
-  padding: 5px;
-}
-
-/*PRUEBA CURSOR*/
-html {
-  cursor: none;
-}
-
-/* Style for our custom cursor */
-.custom-cursor {
-  position: fixed;
-  width: 20px;
-  height: 20px;
-  background-color: white;
-  border-radius: 50%;
-  pointer-events: none; /* Allows clicks to pass through */
-  z-index: 9999; /* Ensure it's above everything */
-  transform: translate(-50%, -50%);
-  transition:
-    width 0.3s ease,
-    height 0.3s ease,
-    background-color 0.3s ease;
-  mix-blend-mode: difference; /* Makes it visible on any background */
-}
-
-/* Bigger cursor when hovering links */
-  a:hover {
-  cursor: none;
-  }
-
-  a:hover ~ .custom-cursor,
-  .custom-cursor.hover {
-  width: 30px;
-  height: 30px;
-  background-color: white;
-  }
-/*FIN PRUEBA CURSOR*/
-  .animacion{
-    height: 10vh;
-  }
-
-  #typing-text{
-    margin-top: 10vh;
-    font-family: 'Fontlab';
-    font-size: 2em;
-    color: black;
-    text-align: center;
-  }
-
-  .servicios{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    justify-content: center;
-  }
-
-  .servicio{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 80%;
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-bottom: 10vh;
-  }
-
-  .parallax{
-    width: 30%;
-    height: 200px;
-    background-image: url(https://i.redd.it/28mqai9hs2jy.jpg);
-    background-attachment: fixed;
-    background-position: 80% 50%;
-    background-repeat: no-repeat;
-    background-size: 30% auto;
-  }
-
-  .texto-servicio{
-    width: 60%;
-  }
-
-  .servicio h2{
-    font-family: 'Authentic-Sans';
-  }
-
-  .servicio p{
-    font-family: 'Authentic-Sans-Normal';
-  }
-
-  .servicio img{
-    width: 35%;
-    height: 300px;
-    object-fit: contain;
-  }
-
-  /*.typing {
-    animation: blink-caret 0.75s step-end infinite;
+:root{
+      --size: 20px; /* cursor diameter */
+      --trail: .6; /* smoothing factor (0-1) */
     }
 
-  @keyframes blink-caret {
-    from, to { border-color: transparent }
-    50% { border-color: #333; }
-    }*/
+    html,body{
+      width: 100vw;
+      height:100vh;
+      margin:0;
+      cursor:none;
+      display:flex;
+      flex-direction: column;
+      background-color: white;
+    }
 
-    /* Brick Wall Animation Styles */
-.brick-wall-container {
-  width: 25%;
-  height: 200px;
-  position: relative;
-  margin-top: 20px;
-  background-color: #f5f5f5;
-  overflow: hidden;
-}
+    .cursor{
+      position:fixed;
+      left:0; top:0;
+      width:var(--size);
+      height:var(--size);
+      border-radius:50%;
+      background: #fff;
+      mix-blend-mode: difference;
+      transform:translate(-50%,-50%) scale(1);
+      transition:width .18s ease,height .18s ease,transform .18s ease,opacity .2s ease;
+      will-change:transform,left,top;
+      z-index:999999;
+    }
+    .cursor.pointer-down{ transform: translate(-50%,-50%) scale(1.5); }
+    @media (pointer:coarse){
+      .cursor{display:none}
+      body{cursor:auto}
+    }
 
-.brick {
-  position: absolute;
-  background-color: #000;
-  box-sizing: border-box;
-  opacity: 0;
-  transform: translateY(50px);
-  transition: opacity 0.3s, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border-radius: 3px;
-}
+   @font-face {
+   font-family: "Tanklager-Original";
+   src: url("fonts/Tanklager-Original.woff2") format("woff2"),
+        url("fonts/Tanklager-Original.woff") format("woff");
+   font-weight: normal;
+   font-style: normal;
+    }
 
-.brick.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+    @font-face {
+    font-family: "Karrik-Regular";
+    src: url("fonts/Karrik-Regular.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+     }
+
+     @font-face {
+     font-family: "Karrik-Italic";
+     src: url("fonts/Karrik-Italic.woff2") format("woff2");
+     font-weight: normal;
+     font-style: italic;
+      }
+
+    .contenedor1 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      align-content: flex-start;
+      justify-content: flex-start;
+      width: 100vw;
+      height: 100vh;
+      background-color: white;
+      background-size: 20%;
+      background-position: center;
+      background-repeat: no-repeat;
+      font-family: 'Tanklager-Original';
+    }
+
+    .contenedor1 p{
+      width: 20%;
+      font-family:'Karrik-Regular';
+      text-align: justify;
+      margin-top: 20vh;
+    }
+
+    .contenedor1 h1{
+      font-size: 5em;
+      padding: 5vw;
+      color: black;
+    }
+
+    .nav a{
+      font-family: 'Karrik-Regular';
+      font-size: 1em;
+      padding: 5vw;
+      color: black;
+      text-decoration: none;
+      padding: 1em;
+      margin: 0;
+      background-color: transparent;
+    }
+
+    .nav {
+      display: flex;
+      flex-direction: row;
+      width: 100vw;
+      justify-content: space-around;
+      padding: 0;
+      background-color: transparent;
+    }
+
+    a:hover {
+      cursor: none;
+    }
+
+    @media only screen and (max-width: 720px) {
+      .contenedor1 p{
+        text-align: left;
+        width: 30%;
+        margin-top: 20vh;
+        background-color: white;
+        padding: 1em;
+        background-blend-mode: difference;
+      }
+
+      .contenedor1 h1{
+        color: white;
+        text-shadow: 3px 3px 0px black;
+      }
+
+      .contenedor1{
+        background-size: cover!important;
+      }
+
+      .cursor{
+        display: none;
+      }
+    }

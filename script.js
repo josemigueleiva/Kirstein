@@ -1,108 +1,72 @@
-const phrases = [
-            "<h1>¡Hola mundo!</h1>",
-            "<h1>Hello, world!</h1>",
-            "KIRSTEIN"
-        ];
-        const typingElement = document.getElementById('typing-text');
-        let phraseIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        let typingSpeed = 150; // milliseconds
+(function(){
+      const cursor = document.getElementById('cursor');
 
-        function type() {
-            const currentPhrase = phrases[phraseIndex];
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+      let curX = mouseX;
+      let curY = mouseY;
 
-            if (isDeleting) {
-                // Deleting characters
-                typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
-                charIndex--;
-                typingSpeed = 50; // Faster when deleting
-            } else {
-                // Typing characters
-                typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
-                charIndex++;
-                typingSpeed = 150;
-            }
+      const lerp = (a,b,t) => a + (b-a) * t;
 
-            // Check if current phrase is complete
-            if (!isDeleting && charIndex === currentPhrase.length) {
-                // Pause at end of phrase
-                typingSpeed = 1000;
-                isDeleting = true;
-            } else if (isDeleting && charIndex === 0) {
-                // Move to next phrase
-                isDeleting = false;
-                phraseIndex = (phraseIndex + 1) % phrases.length;
-                typingSpeed = 500; // Pause before typing next phrase
-            }
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursor.style.opacity = 1;
+      });
 
-            setTimeout(type, typingSpeed);
+      window.addEventListener('mouseleave', ()=> cursor.style.opacity = 0);
+      window.addEventListener('mouseenter', ()=> cursor.style.opacity = 1);
+
+      window.addEventListener('mousedown', ()=> cursor.classList.add('pointer-down'));
+      window.addEventListener('mouseup', ()=> cursor.classList.remove('pointer-down'));
+
+      const interactSelector = 'a, button, input, textarea, [role="button"], .interactive';
+      function updateSizeOverElement(x,y){
+        const el = document.elementFromPoint(x,y);
+        if(!el) return;
+        if(el.closest && el.closest(interactSelector)){
+          cursor.style.width = '28px';
+          cursor.style.height = '28px';
+        } else {
+          cursor.style.width = '';
+          cursor.style.height = '';
         }
+      }
 
-        // Start the typing effect
-        type();
+      function raf(){
+        curX = lerp(curX, mouseX, parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--trail')) || 0.18);
+        curY = lerp(curY, mouseY, parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--trail')) || 0.18);
+        cursor.style.left = curX + 'px';
+        cursor.style.top = curY + 'px';
 
-        // Brick Wall Animation
-        function initBrickWall() {
-          const container = document.querySelector('.servicio .brick-wall-container');
-          const brickWidth = 58;
-          const brickHeight = 28;
-          const brickGap = 2;
-          const containerWidth = container.offsetWidth;
-          const containerHeight = 200;
-          const bricksPerRow = 3; // As requested - 5 bricks in bottom row
-          const rows = Math.floor(containerHeight / (brickHeight + brickGap));
+        updateSizeOverElement(curX, curY);
 
-          let bricks = [];
-          let currentBrick = 0;
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
 
-          // Calculate adjusted brick width to fit exactly 5 bricks with gaps
-          const totalGapWidth = (bricksPerRow - 1) * brickGap;
-          const adjustedBrickWidth = (containerWidth - totalGapWidth) / bricksPerRow;
+      cursor.style.pointerEvents = 'none';
+    })();
 
-          // Create bricks from bottom to top
-          for (let row = rows - 1; row >= 0; row--) {
-            // Offset every other row for brick pattern
-            const offset = row % 2 === 0 ? 0 : (adjustedBrickWidth + brickGap) / 2;
+    const images = [
+    'images/Rosler-LeFlaneur.png',
+    'images/552176001.jpg',
+    'images/bookofmarionette00joserich_0037.jpg',
+    'images/brooklyn.jpg',
+    'images/NYC.jpg',
+    'images/NYC16364.jpg'
+  ];
 
-            for (let col = 0; col < bricksPerRow; col++) {
-              const brick = document.createElement('div');
-              brick.className = 'brick';
+  let current = 0;
+  const container = document.getElementById('bgContainer');
 
-              const left = col * (adjustedBrickWidth + brickGap) + offset;
-              const top = row * (brickHeight + brickGap);
+  function changeBackground() {
+    current = (current + 1) % images.length;
+    container.style.backgroundImage = `url('${images[current]}')`;
+  }
 
-              // If brick would go outside container, skip it
-              if (left + adjustedBrickWidth > containerWidth) continue;
+  // Set initial image
+  container.style.backgroundImage = `url('${images[0]}')`;
 
-              brick.style.width = `${adjustedBrickWidth}px`;
-              brick.style.height = `${brickHeight}px`;
-              brick.style.left = `${left}px`;
-              brick.style.top = `${top}px`;
-
-              container.appendChild(brick);
-              bricks.push(brick);
-            }
-          }
-
-          // Animate bricks one by one in a continuous loop
-          function animateBricks() {
-            if (currentBrick >= bricks.length) {
-              // Reset animation
-              bricks.forEach(brick => brick.classList.remove('visible'));
-              currentBrick = 0;
-              setTimeout(animateBricks, 1000); // Pause before restarting
-              return;
-            }
-
-            bricks[currentBrick].classList.add('visible');
-            currentBrick++;
-            setTimeout(animateBricks, 300);
-          }
-
-          // Start the animation
-          setTimeout(animateBricks, 1000); // Initial delay
-        }
-
-        // Initialize when DOM is loaded
-        document.addEventListener('DOMContentLoaded', initBrickWall);
+  // Change image every 3 seconds
+  setInterval(changeBackground, 1000);
