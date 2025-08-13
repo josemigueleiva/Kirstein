@@ -139,7 +139,7 @@
     }
 
     .contenedor1, .contenedor2 {
-      flex-shrink: 1;
+      flex-shrink: 0;
       overflow-y: hidden;
       overflow-x: hidden;
     }
