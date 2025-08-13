@@ -50,11 +50,12 @@
 
     const images = [
     'images/Rosler-LeFlaneur.png',
-    'images/552176001.jpg',
-    'images/bookofmarionette00joserich_0037.jpg',
-    'images/brooklyn.jpg',
-    'images/NYC.jpg',
-    'images/NYC16364.jpg'
+    'images/_MG_0766.webp',
+    'images/_MG_2199.webp',
+    'images/_MG_2408.webp',
+    'images/_MG_2596.webp',
+    'images/FelipeUlloAranda.png',
+    'images/vibradowordpress.jpg'
   ];
 
   let current = 0;
@@ -70,3 +71,13 @@
 
   // Change image every 3 seconds
   setInterval(changeBackground, 1000);
+
+  document.querySelector('a.proyectos').addEventListener('click', function (e) {
+    e.preventDefault(); // prevent default link behavior
+    const target = document.getElementById('contenedor2');
+
+    target.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center' // aligns so that target is centered vertically
+    });
+  });
