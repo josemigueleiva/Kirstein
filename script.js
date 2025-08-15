@@ -48,29 +48,7 @@
       cursor.style.pointerEvents = 'none';
     })();
 
-    const images = [
-    'images/Rosler-LeFlaneur.png',
-    'images/_MG_0766.webp',
-    'images/_MG_2199.webp',
-    'images/_MG_2408.webp',
-    'images/_MG_2596.webp',
-    'images/FelipeUlloAranda.png',
-    'images/vibradowordpress.jpg'
-  ];
 
-  let current = 0;
-  const container = document.getElementById('bgContainer');
-
-  function changeBackground() {
-    current = (current + 1) % images.length;
-    container.style.backgroundImage = `url('${images[current]}')`;
-  }
-
-  // Set initial image
-  container.style.backgroundImage = `url('${images[0]}')`;
-
-  // Change image every 3 seconds
-  setInterval(changeBackground, 1000);
 
   document.querySelector('a.proyectos').addEventListener('click', function (e) {
     e.preventDefault(); // prevent default link behavior
@@ -81,3 +59,46 @@
       block: 'center' // aligns so that target is centered vertically
     });
   });
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+  const clientLogos = [
+    'images/forodelasartes.png',
+    'images/odradek.png',
+    'images/deptojota.png',
+    'images/GPB.png',
+    'images/mercadogris.png'
+  ];
+
+  const marqueeContent = document.querySelectorAll('.marquee-content');
+
+  function createLogoElement(src) {
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = "Client logo";
+    img.loading = "lazy";
+    return img;
+  }
+
+  marqueeContent.forEach(content => {
+    clientLogos.forEach(logo => content.appendChild(createLogoElement(logo)));
+  });
+
+  const totalLogos = clientLogos.length;
+  const duration = Math.max(20, totalLogos * 1.5);
+
+  // Apply animation inline
+  marqueeContent.forEach(content => {
+    content.style.animation = `scroll ${duration}s linear infinite`;
+  });
+
+  // Add keyframes via <style> element
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+  `;
+  document.head.appendChild(style);
+});
